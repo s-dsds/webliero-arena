@@ -62,7 +62,7 @@ window.WLROOM.onPlayerTeamChange = function() {
 	console.log(JSON.stringify(arguments));
 	console.log(act);
 	console.log(currState);
-
+	startScoreLogs();
 	setLock(isFull());
 }
 

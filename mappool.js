@@ -1,10 +1,32 @@
 var mapCache = new Map();
 var baseURL = "https://webliero.gitlab.io/webliero-maps";
 var mypool = [
-    ""arena711,cathode,deathruw,fallout2,memory,owl,owl2,tiger,panther,saloon,simple,ru,pokol2,pyramid,cheese,husk,india,mith,temple27,crecent,badger
-
-    for testing
-    kangaroo: yennefer,giger3,gonad2,blat,poo,
+    "hellhole/arena711.lev",
+    "hellhole/cathode.lev",
+    "hellhole/deathruw.lev",
+    "hellhole/fallout2.lev",
+    "hellhole/Memory.lev",
+    "hellhole/Owl.lev",
+    "hellhole/Owl-2.lev",
+    "hellhole/tiger.lev",
+    "hellhole/panther.lev",
+    "hellhole/Saloon.lev",
+    "hellhole/Simple.lev",
+    "hellhole/RU.lev",
+    "hellhole/pokol2.lev",
+    "hellhole/Pyramid.lev",
+    "hellhole/Cheese.lev",
+    "hellhole/HUSK.LEV",
+    "hellhole/INDIA2.lev",
+    "hellhole/MITH.lev",
+    "hellhole/TEMPLE27.LEV",
+    "hellhole/Crecent.lev",
+    "hellhole/badger.lev",
+    "kangaroo/yennefer.png",
+    "kangaroo/giger3.png",
+    "kangaroo/gonad2.png",
+    "kangaroo/blat2.png",
+    "kangaroo/poo_arena.png",
 ];
 
 var currentMap = 0;
