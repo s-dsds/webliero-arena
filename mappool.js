@@ -1,0 +1,139 @@
+var mapCache = new Map();
+var baseURL = "https://webliero.gitlab.io/webliero-maps";
+var mypool = [
+    ""arena711,cathode,deathruw,fallout2,memory,owl,owl2,tiger,panther,saloon,simple,ru,pokol2,pyramid,cheese,husk,india,mith,temple27,crecent,badger
+
+    for testing
+    kangaroo: yennefer,giger3,gonad2,blat,poo,
+];
+
+var currentMap = 0;
+var currentMapName = "";
+var currentEffect = 0;
+var effectList=Object.keys(effects);
+
+function loadPool(name) {
+	(async () => {
+	mypool = await (await fetch(baseURL + '/' +  name)).json();
+	})();
+}
+
+async function getMapData(name) {
+    let x = 504;
+    let y = 350;
+
+    let obj = mapCache.get(name)
+    if (obj) {
+   //   return obj;
+    }
+    if (name.split('.').pop()=="png") {    
+       obj = await getPngMapData(name);
+    } else {
+        let buff = await (await fetch(baseURL + '/' +  name)).arrayBuffer();
+        let arr = Array.from(new Uint8Array(buff));
+        obj = {x:x,y:y,data:arr};
+    }
+    
+    mapCache.set(name, obj)
+    return obj;
+}
+
+var pixConvFailures = 0;
+	
+function getbestpixelValue(red,green,blue) {
+    let colorVal = Array.prototype.slice.call(arguments).join("_");;
+    if (invPal.get(colorVal)==undefined) {
+            pixConvFailures++;		
+            return 1;
+            
+        } 
+        return invPal.get(colorVal);		
+}
+
+async function getPngMapData(name) {
+    pixConvFailures = 0;
+    let blob = await (await fetch(baseURL + '/' +  name)).blob();
+    let img = new Image();
+    const imageLoadPromise = new Promise(resolve => {        
+      img.onload = resolve;
+      img.src = URL.createObjectURL(blob);
+    });
+    await imageLoadPromise;
+
+    let ret = {x:img.width, y: img.height, data:[]};
+    let canvas = document.createElement("canvas");
+    canvas.width  = ret.x;
+    canvas.height = ret.y;
+    let ctx = canvas.getContext("2d", {alpha: false});
+    ctx.drawImage(img, 0, 0, ret.x, ret.y);
+    
+    let imgData = ctx.getImageData(0, 0, ret.x, ret.y);
+    console.log("data len x y", imgData.data.length, ret.x, ret.y , ret.x * ret.y, imgData.data.length/4);
+    for (let i = 0; i < imgData.data.length; i += 4) {
+      ret.data.push(getbestpixelValue(imgData.data[i],imgData.data[i + 1],imgData.data[i + 2]));
+    }
+    console.log("pix failures", pixConvFailures);
+    return ret;
+}
+
+
+function loadMap(name, data) {
+    console.log(data.data.length);
+    console.log(data.data[2]);
+    let buff=new Uint8Array(data.data).buffer;
+    window.WLROOM.loadRawLevel(name,buff, data.x, data.y);
+}
+
+function resolveNextMap() {
+    currentMap=currentMap+1<mypool.length?currentMap+1:0;
+    currentMapName = mypool[currentMap];
+}
+
+function next() {
+    resolveNextMap();
+
+    loadMapByName(currentMapName);
+}
+
+
+function loadMapByName(name) {
+    console.log(name);
+    (async () => {
+        let data = await getMapData(name);
+        
+	    loadMap(name, data);
+    })();
+}
+
+
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+
+COMMAND_REGISTRY.add("map", ["!map #mapname#: load lev map from gitlab webliero.gitlab.io"], (player, ...name) => {
+    currentMapName = name.join(" ");
+    loadMapByName(currentMapName);
+    return false;
+}, true);
+
+COMMAND_REGISTRY.add("mapi", ["!mapi #index#: load map by pool index"], (player, idx) => {
+    if (typeof idx=="undefined" || idx=="" || isNaN(idx) || idx>=mypool.length) {
+        announce("wrong index, choose any index from 0 to "+(mypool.length-1),player, 0xFFF0000);
+        return false;
+    }
+    currentMapName = mypool[idx];
+    loadMapByName(currentMapName);
+    return false;
+}, true);
+
+COMMAND_REGISTRY.add("clearcache", ["!clearcache: clears local map cache"], (player) => {
+    mapCache = new Map();
+    return false;
+}, true);
