@@ -112,7 +112,7 @@ COMMAND_REGISTRY.add("join", ["!join: you'll be added in the queue for next game
 
 COMMAND_REGISTRY.add("quit", ["!quit: you'll be removed from the waiting queue"], (player) => {
     let place = playerqueue.getPlace(player);
-    if (remPfromQ(player)) {
+    if (playerqueue.remove(player)) {
         let next = (place.nextingame && place.playercount>1) ? `, next player is now "${playerqueue[0].name}"`:'';
         announce(`>> ${player.name} was removed from the queue${next} <<`);
      
