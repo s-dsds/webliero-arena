@@ -1,6 +1,6 @@
 class PlayerEntry {
     constructor(auth, name, id) {
-        this.a = auth;
+        this.auth = auth;
         this.name = name;
         this.id = id;
     }
