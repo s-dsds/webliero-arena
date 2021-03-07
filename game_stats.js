@@ -1,4 +1,5 @@
 var currentGame = null;
+var lastLoser = null;
 
 class Game {
     constructor(startTime, startingplayers) {
@@ -52,7 +53,9 @@ function addPlayerTeamChange(player, from, to) {
 
 function startScoreLogs() {
     if (currentGame==null && isFull()) {
-          currentGame = new Game(Date.now(), window.WLROOM.getPlayerList());
+        console.log("start log");
+        lastLoser = null;
+        currentGame = new Game(Date.now(), window.WLROOM.getPlayerList());
     }
 }
 
@@ -66,9 +69,28 @@ function flushScoreLogs() {
         currentGame.addFinalScores(scores);
         writeGameStats("game_end",currentGame);
         currentGame=null;
+        return scores;
     }
+    return null;
 }
 
 function resolvePlayerInfo(player) {
-    return {name:player.name,auth:auth.get(player.id)};
+    return {name:player.name,auth:auth.get(player.id), id: player.id};
+}
+
+
+function loserReducer(a, c) {
+  if (a.score.score<c.score.score) {
+        return a;
+  }
+  return c;
+  
+}
+
+function computeLoser(scores) {
+    return scores.filter(e => e.team!=0).reduce(loserReducer);
+}
+
+function getLoser() {
+    return lastLoser;
 }

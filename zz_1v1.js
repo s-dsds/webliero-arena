@@ -10,7 +10,7 @@ window.WLROOM.onPlayerJoin = (player) => {
 	announce("Welcome to the duel arena", player, 0xFF2222, "bold");
 
 	if (isFull()) {
-		announce("game is running already, if you want to play wait for a player to leave the game", player, 0xDD2222);
+		announce("game is running already, if you want to play type !join to enter the waiting queue", player, 0xDD2222);
 	}
 	
 	announce("please join us on discord if you're not there yet! "+CONFIG.discord_invite, player, 0xDD00DD, "italic");
@@ -21,29 +21,21 @@ window.WLROOM.onPlayerJoin = (player) => {
 
 window.WLROOM.onPlayerLeave = function(player) {  
 	writeLogins(player, "logout");
+	playerqueue.remove(player);
 	auth.delete(player.id);
-	if (!hasActivePlayers()) {
+
+	if (player.team!=0 && hasActivePlayers()) {
 	   flushScoreLogs();
+	   window.WLROOM.endGame();
 	}
 	setLock(isFull());
 }
 
-
-window.WLROOM.onPlayerChat = function (p, m) {
-	console.log(p.name+" "+m);
-	if (m[0] == "!") {
-		let splitted=m.substr(1).split(' ');
-		if ((p.admin && command(adminCommands, p, splitted)) 
-				||	(command(voteCommands, p, splitted))) {
-			return false;
-		}
-	}
-	writeLog(p,m);
-}
-
-
 window.WLROOM.onGameEnd = function() {		
-	flushScoreLogs();
+	let scores = flushScoreLogs();
+	computeLoser(scores);
+	notifyNextPlayer();
+
 }
 
 window.WLROOM.onPlayerKilled = function(killed, killer) {
@@ -54,21 +46,30 @@ window.WLROOM.onGameStart = function() {
 	startScoreLogs();
 }
 
-window.WLROOM.onGameEnd2 = function() {	
+window.WLROOM.onGameEnd2 = function() {
+	let loser = getLoser();
+	if (loser != null && !playerqueue.isEmpty() && isFull()) {
+		window.WLROOM.setPlayerTeam(loser.id, 0);
+		playerqueue.add(loser);
+		let pe = playerqueue.shift();
+		window.WLROOM.setPlayerTeam(pe.id, 1);
+	}	
+	next();
 }
 
-window.WLROOM.onPlayerTeamChange = function() {
-	var act = hasActivePlayers();
-	console.log(JSON.stringify(arguments));
-	console.log(act);
-	console.log(currState);
-	startScoreLogs();
+window.WLROOM.onPlayerTeamChange = function(p, bp) {
 	setLock(isFull());
+	playerqueue.remove(p);
+	if (typeof bp!='undefined' && bp !==null && p.id==bp.id && isFull()) {
+		console.log("restarting game to get correct start score");
+		window.WLROOM.restartGame();
+	}	
 }
 
 function announce(msg, player, color, style) {
 	window.WLROOM.sendAnnouncement(msg, player.id, color!=null?color:0xb2f1d3, style !=null?style:"", 1);
 }
+
 function notifyAdmins(msg, logNotif = false) {
 	getAdmins().forEach((a) => { window.WLROOM.sendAnnouncement(msg, a.id); });
 	if (logNotif) {

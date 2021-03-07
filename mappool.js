@@ -12,27 +12,25 @@ var mypool = [
     "hellhole/panther.lev",
     "hellhole/Saloon.lev",
     "hellhole/Simple.lev",
-    "hellhole/RU.lev",
+    "hellhole/RU.LEV",
     "hellhole/pokol2.lev",
-    "hellhole/Pyramid.lev",
+    "hellhole/pyramid_1.lev",
     "hellhole/Cheese.lev",
     "hellhole/HUSK.LEV",
-    "hellhole/INDIA2.lev",
+    "hellhole/INDIA2.LEV",
     "hellhole/MITH.lev",
     "hellhole/TEMPLE27.LEV",
     "hellhole/Crecent.lev",
     "hellhole/badger.lev",
-    "kangaroo/yennefer.png",
-    "kangaroo/giger3.png",
-    "kangaroo/gonad2.png",
-    "kangaroo/blat2.png",
-    "kangaroo/poo_arena.png",
+  //  "kangaroo/yennefer.png",
+  //  "kangaroo/giger3.png",
+  //  "kangaroo/gonad2.png",
+  //  "kangaroo/blat2.png",
+  //  "kangaroo/poo_arena.png",
 ];
 
 var currentMap = 0;
 var currentMapName = "";
-var currentEffect = 0;
-var effectList=Object.keys(effects);
 
 function loadPool(name) {
 	(async () => {
@@ -52,7 +50,7 @@ async function getMapData(name) {
        obj = await getPngMapData(name);
     } else {
         let buff = await (await fetch(baseURL + '/' +  name)).arrayBuffer();
-        let arr = Array.from(new Uint8Array(buff));
+        let arr = Array.from(new Uint8Array(buff)).slice(0, x*y);
         obj = {x:x,y:y,data:arr};
     }
     
@@ -140,7 +138,11 @@ function _base64ToArrayBuffer(base64) {
 
 
 COMMAND_REGISTRY.add("map", ["!map #mapname#: load lev map from gitlab webliero.gitlab.io"], (player, ...name) => {
-    currentMapName = name.join(" ");
+    let n = name.join(" ").trim();
+    if (n == "") {
+        announce("map name is empty ",player, 0xFFF0000);
+    }
+    currentMapName = n;
     loadMapByName(currentMapName);
     return false;
 }, true);
