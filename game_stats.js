@@ -88,7 +88,10 @@ function loserReducer(a, c) {
 }
 
 function computeLoser(scores) {
-    return scores.filter(e => e.team!=0).reduce(loserReducer);
+    if (scores == null) {
+        lastLoser = null;
+    }
+    lastLoser = scores.filter(e => e.team!=0).reduce(loserReducer);
 }
 
 function getLoser() {
