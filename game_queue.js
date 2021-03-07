@@ -98,6 +98,14 @@ COMMAND_REGISTRY.add("spec", ["!spec: go back to spectating when you're in the g
 
 
 COMMAND_REGISTRY.add("join", ["!join: you'll be added in the queue for next games"], (player) => {
+    if (player.team != 0) {
+        announce("you're already playing", player);
+        return false;
+    }
+    if (!isFull()) {
+        window.WLROOM.setPlayerTeam(player.id, 1);
+        return false;
+    }
     if (playerqueue.add(player)) {
         let place = playerqueue.getPlace(player);
         let after = (place.prevPlayer!==false)?` after "${place.prevPlayer}"`:'';
