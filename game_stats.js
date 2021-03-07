@@ -90,6 +90,7 @@ function loserReducer(a, c) {
 function computeLoser(scores) {
     if (scores == null) {
         lastLoser = null;
+        return
     }
     lastLoser = scores.filter(e => e.team!=0).reduce(loserReducer);
 }

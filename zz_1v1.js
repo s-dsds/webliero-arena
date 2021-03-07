@@ -67,7 +67,7 @@ window.WLROOM.onPlayerTeamChange = function(p, bp) {
 }
 
 function announce(msg, player, color, style) {
-	window.WLROOM.sendAnnouncement(msg, player.id, color!=null?color:0xb2f1d3, style !=null?style:"", 1);
+	window.WLROOM.sendAnnouncement(msg, typeof player !='undefined'?player.id:null, color!=null?color:0xb2f1d3, style !=null?style:"", 1);
 }
 
 function notifyAdmins(msg, logNotif = false) {

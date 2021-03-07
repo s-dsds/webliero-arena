@@ -20,7 +20,7 @@ var commands;
 	room.setSettings({
 		scoreLimit: 10,
 		timeLimit: 10,
-		gameMode: "dm",
+		gameMode: "lms",
 		levelPool: "arenasBest",
 		respawnDelay: 3,
 		bonusDrops: "health",
