@@ -14,7 +14,7 @@ class PlayerQueue {
         return typeof this.get(auth) != 'undefined';
     }
     get(auth) {
-       return this.filter(e => auth==e.auth)[0];
+       return this.q.filter(e => auth==e.auth)[0];
     }
     getIdx(auth) {
         for(var i = 0; i < this.q.length; i ++) {
