@@ -11,7 +11,7 @@ class PlayerQueue {
         this.q = [];
     }
     has(auth) {
-        return typeof getQueueEntryByAuth(auth) != 'undefined';
+        return typeof this.get(auth) != 'undefined';
     }
     get(auth) {
        return this.filter(e => auth==e.auth)[0];
