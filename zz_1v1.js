@@ -48,10 +48,13 @@ window.WLROOM.onGameStart = function() {
 
 window.WLROOM.onGameEnd2 = function() {
 	let loser = getLoser();
-	if (loser != null && !playerqueue.isEmpty() && isFull()) {
-		window.WLROOM.setPlayerTeam(loser.id, 0);
-		playerqueue.add(loser);
+	console.log('onGameEnd2isfull', isFull());
+	console.log('onGameEnd2isfull', JSON.stringify(loser));
+	if (loser != null && !playerqueue.isEmpty()) {
+		window.WLROOM.setPlayerTeam(loser.player.id, 0);
+		playerqueue.add(loser.player);
 		let pe = playerqueue.shift();
+		console.log(`switching ${loser.player.name} with ${pe.name}`);
 		window.WLROOM.setPlayerTeam(pe.id, 1);
 	}	
 	next();
@@ -59,7 +62,13 @@ window.WLROOM.onGameEnd2 = function() {
 
 window.WLROOM.onPlayerTeamChange = function(p, bp) {
 	setLock(isFull());
-	playerqueue.remove(p);
+	if (p.team==0) {
+		console.log(`${p.name} moved to spec`);
+	} else {
+		console.log(`${p.name} moved to game`);
+		playerqueue.remove(p);
+	}
+	
 	if (typeof bp!='undefined' && bp !==null && p.id==bp.id && isFull()) {
 		console.log("restarting game to get correct start score");
 		window.WLROOM.restartGame();
@@ -67,7 +76,7 @@ window.WLROOM.onPlayerTeamChange = function(p, bp) {
 }
 
 function announce(msg, player, color, style) {
-	window.WLROOM.sendAnnouncement(msg, typeof player !='undefined'?player.id:null, color!=null?color:0xb2f1d3, style !=null?style:"", 1);
+	window.WLROOM.sendAnnouncement(msg, typeof player =='undefined' || player == null?null:player.id, color!=null?color:0xb2f1d3, style !=null?style:"", 1);
 }
 
 function notifyAdmins(msg, logNotif = false) {
