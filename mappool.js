@@ -6,27 +6,35 @@ var mypool = [
     "hellhole/deathruw.lev",
     "hellhole/fallout2.lev",
     "hellhole/Memory.lev",
-    // "hellhole/Owl.lev",
-    // "hellhole/Owl-2.lev",
     "hellhole/tiger.lev",
-    // "hellhole/panther.lev",
     "hellhole/Saloon.lev",
     "hellhole/Simple.lev",
     "hellhole/RU.LEV",
     "hellhole/pokol2.lev",
     "hellhole/pyramid_1.lev",
     "hellhole/Cheese.lev",
-    // "hellhole/HUSK.LEV",
     "hellhole/INDIA2.LEV",
     "hellhole/MITH.lev",
     "hellhole/TEMPLE27.LEV",
-  //  "hellhole/Crecent.lev",
-  //  "hellhole/badger.lev",
-  //  "kangaroo/yennefer.png",
-  //  "kangaroo/giger3.png",
-  //  "kangaroo/gonad2.png",
-  //  "kangaroo/blat2.png",
-  //  "kangaroo/poo_arena.png",
+
+    "神風/2xring.png",
+    "神風/cleanarena.png",
+    "神風/cleanarena_inv.png",
+    "神風/curry_a.png",
+    "神風/curry_b.png",
+    "神風/despair.png",
+    "神風/kaboom.png",
+    "神風/meow.png",
+    "神風/pymid.png",
+    "神風/remake2duel2.png",
+    "神風/vpr_a.png",
+    "神風/vpr_b.png",
+    
+    "kangaroo/yennefer.png",
+    "kangaroo/giger3.png",
+    "kangaroo/gonad2.png",
+    "kangaroo/blat2.png",
+    "kangaroo/poo_arena.png",
 ];
 
 var currentMap = 0;
@@ -44,7 +52,7 @@ async function getMapData(name) {
 
     let obj = mapCache.get(name)
     if (obj) {
-   //   return obj;
+      return obj;
     }
     if (name.split('.').pop()=="png") {    
        obj = await getPngMapData(name);
@@ -134,6 +142,17 @@ function _base64ToArrayBuffer(base64) {
         bytes[i] = binary_string.charCodeAt(i);
     }
     return bytes.buffer;
+}
+
+function shufflePool() {
+    shuffleArray(mypool)
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
 
