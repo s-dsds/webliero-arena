@@ -11,7 +11,7 @@ var mypool = [
     "hellhole/Simple.lev",
     "hellhole/RU.LEV",
     "hellhole/pokol2.lev",
-    "hellhole/pyramid_1.lev",
+    //"hellhole/pyramid_1.lev",
     "hellhole/Cheese.lev",
     "hellhole/INDIA2.LEV",
     "hellhole/MITH.lev",
