@@ -33,8 +33,8 @@ var mypool = [
     "kangaroo/yennefer.png",
     "kangaroo/giger3.png",
     "kangaroo/gonad2.png",
-    "kangaroo/blat2.png",
-    "kangaroo/poo_arena.png",
+   // "kangaroo/blat2.png",
+   // "kangaroo/poo_arena.png",
 ];
 
 var currentMap = 0;
