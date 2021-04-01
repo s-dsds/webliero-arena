@@ -3,7 +3,6 @@ var baseURL = "https://webliero.gitlab.io/webliero-maps";
 var mypool = [
     "hellhole/arena711.lev",
     "hellhole/cathode.lev",
-    "hellhole/deathruw.lev",
     "hellhole/fallout2.lev",
     "hellhole/Memory.lev",
     "hellhole/tiger.lev",
@@ -22,6 +21,7 @@ var mypool = [
     "神風/cleanarena_inv.png",
     "神風/curry_a.png",
     "神風/curry_b.png",
+    "神風/dethruw4.png",
     "神風/despair.png",
     "神風/kaboom.png",
     "神風/meow.png",
@@ -30,9 +30,9 @@ var mypool = [
     "神風/vpr_a.png",
     "神風/vpr_b.png",
     
-    "kangaroo/yennefer.png",
-    "kangaroo/giger3.png",
-    "kangaroo/gonad2.png",
+  //  "kangaroo/yennefer.png",
+  //  "kangaroo/giger3.png",
+ //   "kangaroo/gonad2.png",
    // "kangaroo/blat2.png",
    // "kangaroo/poo_arena.png",
 ];
