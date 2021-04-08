@@ -1,50 +1,10 @@
 var mapCache = new Map();
 var baseURL = "https://webliero.gitlab.io/webliero-maps";
-var mypool = [
-    "hellhole/arena711.lev",
-    "hellhole/cathode.lev",
-    "hellhole/fallout2.lev",
-    "hellhole/Memory.lev",
-    "hellhole/tiger.lev",
-    "hellhole/Saloon.lev",
-    "hellhole/Simple.lev",
-    "hellhole/RU.LEV",
-    "hellhole/pokol2.lev",
-    //"hellhole/pyramid_1.lev",
-    "hellhole/Cheese.lev",
-    "hellhole/INDIA2.LEV",
-    "hellhole/MITH.lev",
-    "hellhole/TEMPLE27.LEV",
-
-    "神風/2xring.png",
-    "神風/cleanarena.png",
-    "神風/cleanarena_inv.png",
-    "神風/curry_a.png",
-    "神風/curry_b.png",
-    "神風/dethruw4.png",
-    "神風/despair.png",
-    "神風/kaboom.png",
-    "神風/meow.png",
-    "神風/pymid.png",
-    "神風/remake2duel2.png",
-    "神風/vpr_a.png",
-    "神風/vpr_b.png",
-    
-  //  "kangaroo/yennefer.png",
-  //  "kangaroo/giger3.png",
- //   "kangaroo/gonad2.png",
-   // "kangaroo/blat2.png",
-   // "kangaroo/poo_arena.png",
-];
+var mypool = {};
+var mypoolIdx = [];
 
 var currentMap = 0;
 var currentMapName = "";
-
-function loadPool(name) {
-	(async () => {
-	mypool = await (await fetch(baseURL + '/' +  name)).json();
-	})();
-}
 
 async function getMapData(name) {
     let x = 504;
@@ -113,8 +73,8 @@ function loadMap(name, data) {
 }
 
 function resolveNextMap() {
-    currentMap=currentMap+1<mypool.length?currentMap+1:0;
-    currentMapName = mypool[currentMap];
+    currentMap=currentMap+1<mypoolIdx.length?currentMap+1:0;
+    currentMapName = mypool[mypoolIdx[currentMap]];
 }
 
 function next() {
@@ -145,7 +105,8 @@ function _base64ToArrayBuffer(base64) {
 }
 
 function shufflePool() {
-    shuffleArray(mypool)
+    mypoolIdx = mypool.keys();
+    shuffleArray(mypoolIdx)
 }
 
 function shuffleArray(array) {

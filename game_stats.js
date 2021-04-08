@@ -2,12 +2,13 @@ var currentGame = null;
 var lastLoser = null;
 
 class Game {
-    constructor(startTime, startingplayers) {
+    constructor(startTime, startingplayers, mapName) {
         this.startTime = startTime;
         this.startingplayers = startingplayers;
         this.playerEvents = [];
         this.playerKills = [];
         this.finalScores = [];
+        this.mapName = mapName;
       }
       addKill(killed, killer) {
         this.playerKills.push({
@@ -52,10 +53,10 @@ function addPlayerTeamChange(player, from, to) {
 }
 
 function startScoreLogs() {
-    if (currentGame==null && isFull()) {
+    if (isFull()) {
         console.log("start log");
         lastLoser = null;
-        currentGame = new Game(Date.now(), window.WLROOM.getPlayerList());
+        currentGame = new Game(Date.now(), window.WLROOM.getPlayerList(), currentMapName);
     }
 }
 

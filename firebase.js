@@ -4,6 +4,10 @@ var notifsRef;
 var modsRef;
 var loginsRef;
 var statsRef;
+var poolRef;
+var settingsRef;
+
+var settingsSnap = {}
 
 function initFirebase() {
     async function load_scripts(script_urls) {
@@ -38,10 +42,14 @@ function initFirebase() {
 		
 		firebase.initializeApp(CONFIG.firebase);
 		fdb = firebase.database();
-		commentsRef = fdb.ref('kami/comments');
-    notifsRef = fdb.ref('kami/notifs');
-    loginsRef = fdb.ref('kami/logins');
-    statsRef = fdb.ref('kami/gamestats');
+		commentsRef = fdb.ref(`${CONFIG.room_id}/comments`);
+        notifsRef = fdb.ref(`${CONFIG.room_id}/notifs`);
+        loginsRef = fdb.ref(`${CONFIG.room_id}/logins`);
+        statsRef = fdb.ref(`${CONFIG.room_id}/gamestats`);
+        poolRef = fdb.ref(`${CONFIG.room_id}/pool`);
+        settingsRef = fdb.ref(`${CONFIG.room_id}/settings`);
+        listenForPoolEvents();
+        listenForSettingsEvents();
 		console.log('firebase ok');
 
 	})();		
@@ -62,3 +70,51 @@ function writeGameStats(event, stats) {
   const now = Date.now();
   statsRef.child(now).set({event: event, stats:stats});
 }
+
+/** mappool */
+function listenForPoolEvents() {
+    poolRef.on('child_added', loadnewMap);
+    poolRef.on('child_changed', loadnewMap);
+    poolRef.on('child_removed', removeMap);
+}
+
+function loadnewMap(childSnapshot) {
+	var v = childSnapshot.val();
+	var k = childSnapshot.key;
+
+    mypool[k] = v;
+    shufflePool();
+	
+	console.log("map `"+v.name+"` has been added to the pool");
+    notifyAdmins("map `"+v.name+"` has been added to the pool");
+}
+
+function removeMap(childSnapshot) {
+	var k = childSnapshot.key;
+	var n = mypool[k];
+    delete mypool[k];
+    shufflePool();
+	console.log("map `"+n+"` has been remove from the pool");
+    notifyAdmins("map `"+n+"` has been remove from the pool");qa
+}
+
+/** settings */
+function listenForSettingsEvents() {
+    settingsRef.on('value', updateSettings);
+}
+
+function updateSettings(snapshot) {
+    let v = snapshot.val();
+    let sett = window.WLROOM.getSettings();
+    for(let s in v) {
+        sett[s] = v[s];
+    } 
+    sett.teamsLocked = isFull();
+    window.WLROOM.setSettings(sett);
+    settingsSnap = sett;
+}
+
+COMMAND_REGISTRY.add("reset", ["!reset: resets to last settings loaded from database"], (player) => {
+    window.WLROOM.setSettings(settingsSnap);
+    return false;
+}, true);
