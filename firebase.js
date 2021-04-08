@@ -85,8 +85,8 @@ function loadnewMap(childSnapshot) {
     mypool[k] = v;
     shufflePool();
 	
-	console.log("map `"+v.name+"` has been added to the pool");
-    notifyAdmins("map `"+v.name+"` has been added to the pool");
+	console.log("map `"+v+"` has been added to the pool");
+    notifyAdmins("map `"+v+"` has been added to the pool");
 }
 
 function removeMap(childSnapshot) {
@@ -95,7 +95,7 @@ function removeMap(childSnapshot) {
     delete mypool[k];
     shufflePool();
 	console.log("map `"+n+"` has been remove from the pool");
-    notifyAdmins("map `"+n+"` has been remove from the pool");qa
+    notifyAdmins("map `"+n+"` has been remove from the pool");
 }
 
 /** settings */
