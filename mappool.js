@@ -105,7 +105,7 @@ function _base64ToArrayBuffer(base64) {
 }
 
 function shufflePool() {
-    mypoolIdx = mypool.keys();
+    mypoolIdx = Object.keys(mypool);
     shuffleArray(mypoolIdx)
 }
 
