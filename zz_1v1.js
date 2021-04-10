@@ -6,7 +6,6 @@ window.WLROOM.onPlayerLeave = function(player) {
 	auth.delete(player.id);
 
 	if (player.team!=0 && hasActivePlayers()) {
-	   flushScoreLogs();
 	   window.WLROOM.endGame();
 	}
 	setLock(isFull());
@@ -14,9 +13,8 @@ window.WLROOM.onPlayerLeave = function(player) {
 
 window.WLROOM.onGameEnd = function() {		
 	let scores = flushScoreLogs();
-	computeLoser(scores);
-	notifyNextPlayer();
-
+	let out = currentOutQueue.computeScores(scores);
+	notifyNextPlayer(out);
 }
 
 window.WLROOM.onPlayerKilled = function(killed, killer) {
@@ -24,19 +22,25 @@ window.WLROOM.onPlayerKilled = function(killed, killer) {
 }
 
 window.WLROOM.onGameStart = function() {
-	startScoreLogs();
+	startScoreLogs()
 }
 
 window.WLROOM.onGameEnd2 = function() {
-	let loser = getLoser();
+	let out = currentOutQueue.getChange();
 	console.log('onGameEnd2isfull', isFull());
 	console.log('onGameEnd2isfull', JSON.stringify(loser));
-	if (loser != null && !playerqueue.isEmpty()) {
-		window.WLROOM.setPlayerTeam(loser.player.id, 0);
-		playerqueue.add(loser.player);
+	if (out != null && !playerqueue.isEmpty() && out.isOut()) {
+		moveToSpec(out.player);
+		playerqueue.add(out.player);
 		let pe = playerqueue.shift();
-		console.log(`switching ${loser.player.name} with ${pe.name}`);
-		window.WLROOM.setPlayerTeam(pe.id, 1);
+		console.log(`switching ${out.player.name} with ${pe.name}`);
+		moveToGame(pe);
+		// add another player if somehow one disappeared
+		if (!isFull() && !playerqueue.isEmpty()) {
+			let pe = playerqueue.shift();
+			moveToGame(pe);
+			console.log(`added ${pe.name} to complete the game`);
+		}
 	}	
 	next();
 }
@@ -50,16 +54,26 @@ window.WLROOM.onPlayerTeamChange = function(p, bp) {
 		playerqueue.remove(p);
 	}
 	
-	if (typeof bp!='undefined' && bp !==null && p.id==bp.id && isFull()) {
+	if (!bp == null && isFull()) { // this is when the player manually clicked "join" or an admin pushed him in
 		console.log("restarting game to get correct start score");
 		window.WLROOM.restartGame();
 	}	
 }
 
-function announce(msg, player, color, style) {
-	window.WLROOM.sendAnnouncement(msg, typeof player =='undefined' || player == null?null:player.id, color!=null?color:0xb2f1d3, style !=null?style:"", 1);
+function announce(msg, player, color, style, sound = 1) {
+	window.WLROOM.sendAnnouncement(msg, typeof player =='undefined' || player == null?null:player.id, color!=null?color:0xb2f1d3, style !=null?style:"", sound);
 }
 
+function announceEmphasizeToPlayerOnly(msg, player, color, style, sound = 1) {
+	for (let p of window.WLROOM.getPlayerList()) {
+		if (p.id=player.id) {
+			announce(msg, p, color, style, sound)
+		} else {
+			announce(msg, p, null, '', 0)
+		}
+	}
+	return;
+}
 function notifyAdmins(msg, logNotif = false) {
 	getAdmins().forEach((a) => { window.WLROOM.sendAnnouncement(msg, a.id); });
 	if (logNotif) {

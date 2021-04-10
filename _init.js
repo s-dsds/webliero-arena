@@ -1,4 +1,5 @@
 var admins = new Set(CONFIG.admins);
+var maxGames = CONFIG.max_games_in_a_row;
 
 let auth = new Map();
 var fdb;

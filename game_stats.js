@@ -1,5 +1,4 @@
 var currentGame = null;
-var lastLoser = null;
 
 class Game {
     constructor(startTime, startingplayers, mapName) {
@@ -55,7 +54,7 @@ function addPlayerTeamChange(player, from, to) {
 function startScoreLogs() {
     if (isFull()) {
         console.log("start log");
-        lastLoser = null;
+        startsOutQueue();
         currentGame = new Game(Date.now(), window.WLROOM.getPlayerList(), currentMapName);
     }
 }
@@ -65,7 +64,12 @@ function flushScoreLogs() {
         const alpha = window.WLROOM.getTeamScore(1);
         const bravo = window.WLROOM.getTeamScore(2);
         console.log("team_scores",alpha,bravo);
-        let scores = window.WLROOM.getPlayerList().map(p => {return {player:resolvePlayerInfo(p),team:p.team,score: window.WLROOM.getPlayerScore(p.id)};});
+        let scores = getActivePlayers().map(p => {return {player:resolvePlayerInfo(p),team:p.team,score: window.WLROOM.getPlayerScore(p.id)};});
+        if (scores.length!=2) {
+            console.log("incorrect number of players, scores dropped");
+            currentGame=null;
+            return null;
+        }
         console.log("scores", scores);
         currentGame.addFinalScores(scores);
         writeGameStats("game_end",currentGame);
@@ -79,23 +83,3 @@ function resolvePlayerInfo(player) {
     return {name:player.name,auth:auth.get(player.id), id: player.id};
 }
 
-
-function loserReducer(a, c) {
-  if (a.score.score<c.score.score) {
-        return a;
-  }
-  return c;
-  
-}
-
-function computeLoser(scores) {
-    if (scores == null) {
-        lastLoser = null;
-        return
-    }
-    lastLoser = scores.filter(e => e.team!=0).reduce(loserReducer);
-}
-
-function getLoser() {
-    return lastLoser;
-}

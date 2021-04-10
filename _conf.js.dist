@@ -8,7 +8,7 @@ const CONFIG = {
         storageBucket: "xxx.appspot.com",
         }, 
     public: false,
-    max_win: 3,
+    max_games_in_a_row: 3,
     room_id: "kami",
     motd: "Welcome to the duel arena", //ZimmBall Arena
     room_name: "Liero Arena",

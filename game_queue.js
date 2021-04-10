@@ -40,7 +40,7 @@ class PlayerQueue {
         if (!this.has(a)) {
             return false;
         }
-        this.q =  this.q.filter(e => a!=e.auth);
+        this.q =  this.q.filter(e => a!=e.auth);        
         return true;
     }
     isEmpty() {
@@ -76,23 +76,20 @@ class PlayerQueue {
 
 var playerqueue = new PlayerQueue();
 
-function notifyNextPlayer() {
-    let player = playerqueue.getNextPlayer();
-    if (player!=null) {  
-        announce(`>> @${player.name} is to enter the arena next <<`);
-    }
+function moveToGame(player) {
+    window.WLROOM.setPlayerTeam(player.id, 1);
 }
-   
+function moveToSpec(player) {
+    window.WLROOM.setPlayerTeam(player.id, 0);
+}
 
 COMMAND_REGISTRY.add("spec", ["!spec: go back to spectating when you're in the game, quits the queue if it's empty"], (player) => {
     if (player.team == 0) {
         announce("you're already spectating", player);
         return false;
     }
-    if (!playerqueue.isEmpty()) {
-        playerqueue.add(player);
-    }
-    window.WLROOM.setPlayerTeam(player.id, 0);
+    announce("you'll have to type !join to play again", player);
+    moveToSpec(player);
     return false;
 }, false);
 
@@ -103,7 +100,7 @@ COMMAND_REGISTRY.add("join", ["!join: you'll be added in the queue for next game
         return false;
     }
     if (!isFull()) {
-        window.WLROOM.setPlayerTeam(player.id, 1);
+        moveToGame(player);
         return false;
     }
     if (playerqueue.add(player)) {
@@ -123,7 +120,6 @@ COMMAND_REGISTRY.add("quit", ["!quit: you'll be removed from the waiting queue"]
     if (playerqueue.remove(player)) {
         let next = (place.nextingame && place.playercount>1) ? `, next player is now "${playerqueue[0].name}"`:'';
         announce(`>> ${player.name} was removed from the queue${next} <<`);
-     
     } else {
         announce("you were not in the queue", player);
     }
