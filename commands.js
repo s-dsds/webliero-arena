@@ -26,7 +26,7 @@ window.WLROOM.onGameStart = function() {
 }
 
 window.WLROOM.onGameEnd2 = function() {
-	let out = currentOutQueue.getChange();
+	let out = currentOutQueue.getChangeSet();
 	console.log('onGameEnd2isfull', isFull());
 	console.log('onGameEnd2isfull', JSON.stringify(loser));
 	if (out != null && !playerqueue.isEmpty() && out.isOut()) {
