@@ -29,6 +29,7 @@ var AFK_HANDLER = (function () {
     graceTime: 5000,
     hotTimeout: 3000,
     kickAFKSpectatorWhenFull: true,
+    maxPlayers: 0,
     enabled: true,
   } //default settings
   
@@ -93,7 +94,7 @@ var AFK_HANDLER = (function () {
       return;
     }
     const list = room.getPlayerList();
-    if (list.length >= room.config.maxPlayers) {
+    if (list.length >= settings.maxPlayers) {
       let oldest = null;
       for(let playerId in kickCandidates) {
         if (!oldest) {
@@ -129,6 +130,7 @@ var AFK_HANDLER = (function () {
       return
     }
     room=argRoom 
+    
     loadSettings(confArgs)
     log('loading afk plugin', settings)
     window.AFKLUGIN = true

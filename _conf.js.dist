@@ -12,5 +12,6 @@ const CONFIG = {
     room_id: "kami",
     motd: "Welcome to the duel arena", //ZimmBall Arena
     room_name: "Liero Arena",
+    max_players: 12,
 };
 

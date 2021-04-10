@@ -14,7 +14,7 @@ var commands;
 	var room = WLInit({
 		token: window.WLTOKEN,
 		roomName: CONFIG.room_name,
-		maxPlayers: 12,	
+		maxPlayers: CONFIG.max_players,	
 		public: CONFIG.public
 	});
 
