@@ -22,7 +22,7 @@ var AFK_HANDLER = (function () {
   let room = null
   
   let settings = {
-    motd: `Anti-AFK plugin is enabled, you'll be moved to spectating if you stay more that ${settings.timeout / 1000} seconds inactive in the game except if you're alone`,
+    motd: `motd`,
     motd_color: 0x00A9D0,
     spectatorTeam: 0,
     timeout: 20000,
@@ -37,6 +37,7 @@ var AFK_HANDLER = (function () {
       ...settings,
       ...confArgs
     }
+    settings.motd = `Anti-AFK plugin is enabled, you'll be moved to spectating if you stay more that ${settings.timeout / 1000} seconds inactive in the game except if you're alone`;
   }
   const execMotd = (player) => {
     if (!settings.motd) {
