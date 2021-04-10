@@ -1,5 +1,3 @@
-var currentOutQueue = new OutQueue();
-
 const REASON_OUT_MAX = 0;
 const REASON_OUT_LOOSE = 1;
 const REASON_NOT_OUT_TIE = 2;
@@ -13,6 +11,7 @@ class Out {
         return this.player!=null
     }
 }
+
 class OutQueue {
     constructor() {
         this.currentOut = null;
@@ -58,6 +57,8 @@ class OutQueue {
         return this.currentOut;
     }
 }
+
+var currentOutQueue = new OutQueue();
 
 function notifyNextPlayer() {
     let out = currentOutQueue.getChangeSet();
