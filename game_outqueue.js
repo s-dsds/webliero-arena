@@ -1,4 +1,4 @@
-var currentOutQueue = null;
+var currentOutQueue = new OutQueue();
 
 const REASON_OUT_MAX = 0;
 const REASON_OUT_LOOSE = 1;
@@ -58,17 +58,6 @@ class OutQueue {
         return this.currentOut;
     }
 }
-
-function startsOutQueue() {
-    if (currentOutQueue==null) {
-        currentOutQueue = new OutQueue();
-    } else {
-        currentOutQueue.resetOut();
-    }
-}
-
-
-
 
 function notifyNextPlayer() {
     let out = currentOutQueue.getChangeSet();

@@ -54,7 +54,7 @@ function addPlayerTeamChange(player, from, to) {
 function startScoreLogs() {
     if (isFull()) {
         console.log("start log");
-        startsOutQueue();
+        currentOutQueue.resetOut();
         currentGame = new Game(Date.now(), window.WLROOM.getPlayerList(), currentMapName);
     }
 }
