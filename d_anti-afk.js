@@ -50,7 +50,7 @@ var AFK_HANDLER = (function () {
   const hotPlayers = {}
   const kickCandidates = {}
   const evictPlayer = (playerId) => {
-    if (!settings.enabled) {
+    if (!settings.enabled || !isFull()) {
       return;
     }
     const message = `You will be moved to spectators due too inactivity in ${settings.graceTime / 1000} seconds, please move`
@@ -114,7 +114,7 @@ var AFK_HANDLER = (function () {
     delete kickCandidates[player.id]
     clearPlayerTimeout(player.id)
   }
-  
+
   const handleTeamChange = (player) => {
     if (player.team == settings.spectatorTeam) {
       clearPlayerTimeout(player.id)
