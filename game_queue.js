@@ -107,6 +107,7 @@ COMMAND_REGISTRY.add("join", ["!join: you'll be added in the queue for next game
     }
     if (!isFull()) {
         moveToGame(player);
+        window.WLROOM.restartGame();
         return false;
     }
     if (playerqueue.add(player)) {
