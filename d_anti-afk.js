@@ -114,11 +114,13 @@ var AFK_HANDLER = (function () {
     delete kickCandidates[player.id]
     clearPlayerTimeout(player.id)
   }
+  
   const handleTeamChange = (player) => {
     if (player.team == settings.spectatorTeam) {
       clearPlayerTimeout(player.id)
     } else {
-      removePlayer(player)
+      delete kickCandidates[player.id]
+      resetPlayerTimeout(player.id)
     }
   }
   
@@ -150,28 +152,3 @@ var AFK_HANDLER = (function () {
     init: init,
     loadSettings: loadSettings,
   }})()
-  /*  return new Promise((resolve, reject) => {
-    const room = window.WLROOM
-    if (room.AFK_PLUGIN) {
-      throw 'AFK_PLUGIN already loaded'
-    }
-    if (!room.config) {
-      throw 'you need to set do var config = {....};window.WLInit(config); room.config = config'
-    }
-    const defaults = {
-      spectatorTeam: 0,
-      timeout: 60000,
-      graceTime: 10000,
-      hotTimeout: 3000,
-      kickAFKSpectatorWhenFull: true
-    }
-    const settings = {
-      ...defaults,
-      ...room.AFKConfig
-    }
-    log('AFK_PLUGIN loaded', settings)
-    room.AFK_PLUGIN = true
-    
-    resolve()
-  })
-})() */

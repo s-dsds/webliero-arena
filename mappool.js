@@ -121,6 +121,7 @@ COMMAND_REGISTRY.add("map", ["!map #mapname#: load lev map from gitlab webliero.
     let n = name.join(" ").trim();
     if (n == "") {
         announce("map name is empty ",player, 0xFFF0000);
+        return false;
     }
     currentMapName = n;
     loadMapByName(currentMapName);

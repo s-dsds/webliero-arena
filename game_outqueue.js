@@ -27,7 +27,9 @@ class OutQueue {
         }
         let s0 = scores[0].score.score;
         let s1 = scores[1].score.score;
-        this.lastGames.shift();
+        if (this.lastGames.length>=maxGames) {
+            this.lastGames.shift();
+        }
         this.lastGames.push(scores);
         
         if (s0==s1) {
