@@ -1,7 +1,7 @@
 var counts = {};
 var userGames = {};
 var allPlayers = new Map();
-var gameLength = 120;
+
 var rankElo = [];
 var mergedAuth = {
 	//"yskXT4e7xq6mBflgmJ05ttXX6qQz7roaR9Tpv0mp9H0" : "2XLHD0QhcMds4lpA7TPItxqrQ1BSmZow7bRgS9r_Q5U", //flagworm
@@ -28,8 +28,12 @@ function addStat(k,v) {
 	o.startTime =  new Date(v.stats.startTime);
 	
 	o.endTime =  new Date(parseInt(k));
-	
-	
+	(async() => {
+		while(!window.hasOwnProperty("settingsSnap")) {
+			await new Promise(resolve => setTimeout(resolve, 1000));
+		}
+			
+
 	/*
 		[ {
 			"player" : {
@@ -61,6 +65,9 @@ function addStat(k,v) {
 			"team" : 1
 		  } ]
 	  */
+	 let gameLength = settingsSnap.timeLimit*60;
+	 let maxScore = settingsSnap.scoreLimit;
+
 	  if (typeof v.stats.finalScores == "object") {
 		  let activePlayers = v.stats.finalScores.filter(e => e.team!=0);
 		  /*-- validation */
@@ -77,7 +84,7 @@ function addStat(k,v) {
 				console.log(`game invalidated`, v.stats.finalScores, diffSE, o.startTime, k);
 				return;
 		  }
-		  if (activePlayers.filter(e => (e.score.kills>7||e.score.score>7)).length>0) {
+		  if (activePlayers.filter(e => (e.score.kills>maxScore||e.score.score>maxScore)).length>0) {
 			console.log(`detected a game with bad config (flagworm?))`, v.stats.finalScores);
 			return;
 		  }
@@ -154,7 +161,10 @@ function addStat(k,v) {
 				userGames[p.auth].games.push({start:o.startTime, end:o.endTime, finalScores: activePlayers, computed:stats});
 			});
 			rankElo.sort(compareByElo)
+			
 	  }
+	})();
+
 	  
 }
 

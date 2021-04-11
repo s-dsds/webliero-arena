@@ -7,8 +7,6 @@ var statsRef;
 var poolRef;
 var settingsRef;
 
-var settingsSnap = {}
-
 function initFirebase() {
     async function load_scripts(script_urls) {
         function load(script_url) {
@@ -119,10 +117,10 @@ function updateSettings(snapshot) {
     } 
     sett.teamsLocked = isFull();
     window.WLROOM.setSettings(sett);
-    settingsSnap = sett;
+    window.settingsSnap = sett;
 }
 
 COMMAND_REGISTRY.add("reset", ["!reset: resets to last settings loaded from database"], (player) => {
-    window.WLROOM.setSettings(settingsSnap);
+    window.WLROOM.setSettings(window.settingsSnap);
     return false;
 }, true);
