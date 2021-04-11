@@ -53,7 +53,7 @@ window.WLROOM.onPlayerTeamChange = function(p, bp) {
 		playerqueue.remove(p);
 	}
 	
-	if (!bp == null && isFull()) { // this is when the player manually clicked "join" or an admin pushed him in
+	if (bp !== null && isFull()) { // this is when the player manually clicked "join" or an admin pushed him in
 		console.log("restarting game to get correct start score");
 		window.WLROOM.restartGame();
 	}	
