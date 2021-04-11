@@ -36,3 +36,5 @@ function setLock(b = true) {
 	sett.teamsLocked = b;
 	window.WLROOM.setSettings(sett);
 }
+
+console.log(roomLink);
