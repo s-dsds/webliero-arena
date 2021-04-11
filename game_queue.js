@@ -88,6 +88,7 @@ function moveToGameIfSomeoneIsWaiting() {
         let pe = playerqueue.shift();
         console.log(`moving ${pe.name} to the game`);
         moveToGame(pe);
+        window.WLROOM.restartGame();
     }
 }
 COMMAND_REGISTRY.add("spec", ["!spec: go back to spectating when you're in the game, quits the queue if it's empty"], (player) => {
