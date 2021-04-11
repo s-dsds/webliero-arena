@@ -52,7 +52,7 @@ class OutQueue {
         return this.currentOut
     }
     #hasPlayedTooMuch(player) {
-        return this.lastGames.reduce(g => g.scores.filter(s => s.player.auth==player.auth)>0 )>=maxGames
+        return this.lastGames.reduce(g => g.score.filter(s => s.player.auth==player.auth)>0 )>=maxGames
     }
     
     getChangeSet() {
