@@ -63,10 +63,12 @@ var AFK_HANDLER = (function () {
         const reason = `You were afk for more than ${settings.timeout / 1000} seconds, moving you to spectators`
         room.sendAnnouncement(reason, playerId, 0xFF0000, "bold", 2);
         room.setPlayerTeam(playerId, 0)
+        moveToGameIfSomeoneIsWaiting();
         kickCandidates[playerId] = new Date()
       }
     }, settings.graceTime)
   }
+
   const clearPlayerTimeout = (playerId) => {
     if(playingPlayers[playerId]) {
       clearTimeout(playingPlayers[playerId])

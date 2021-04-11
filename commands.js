@@ -47,7 +47,7 @@ window.WLROOM.onGameEnd2 = function() {
 window.WLROOM.onPlayerTeamChange = function(p, bp) {
 	setLock(isFull());
 	if (p.team==0) {
-		console.log(`${p.name} moved to spec`);
+        console.log(`${p.name} moved to spec`);
 	} else {
 		console.log(`${p.name} moved to game`);
 		playerqueue.remove(p);
