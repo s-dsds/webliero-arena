@@ -6,7 +6,7 @@ function announce(msg, player, color, style, sound = 1) {
 
 function announceEmphasizeToPlayerOnly(msg, player, color, style, sound = 1) {
 	for (let p of window.WLROOM.getPlayerList()) {
-		if (p.id=player.id) {
+		if (p.id==player.id) {
 			announce(msg, p, color, style, sound)
 		} else {
 			announce(msg, p, null, '', 0)
