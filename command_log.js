@@ -4,7 +4,7 @@ window.WLROOM.onPlayerChat = function (p, m) {
 }
 
 window.WLROOM.onPlayerJoin = (player) => {
-	if (Array.from(auth.values()).indexOf(player.auth)) {
+	if (Array.from(auth.values()).indexOf(player.auth)>-1) {
 		writeLogins(player, "kicked_duped");
 		window.WLROOM.kickPlayer(player.id, "duplicate player detected, this room doesn't allow you to connect twice for the queue to work correctly, sorry", false)
 		return;
