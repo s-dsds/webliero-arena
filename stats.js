@@ -211,7 +211,7 @@ function printELO(s) {
 
 }
 
-
+listenForStatsEvents();
 
 
 COMMAND_REGISTRY.add("stats", ["!stats #num#: gets stats for player currently logged in or yourself if you don't give any num"], (player, idx, needle) => {
