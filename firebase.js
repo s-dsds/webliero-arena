@@ -50,6 +50,7 @@ function initFirebase() {
         settingsRef = fdb.ref(`${CONFIG.room_id}/settings`);
         listenForPoolEvents();
         listenForSettingsEvents();
+        listenForStatsEvents();
 		console.log('firebase ok');
 
 	})();		
@@ -64,7 +65,7 @@ function writeLogins(p, type ="login") {
     if (typeof a == 'undefined') {
         return
     }
-    
+
     loginsRef.child(now).set({name: p.name, auth:a, type:type, formatted:(new Date(now).toLocaleString())});
 }
 
