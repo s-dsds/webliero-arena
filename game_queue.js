@@ -82,7 +82,13 @@ function moveToGame(player) {
 function moveToSpec(player) {
     window.WLROOM.setPlayerTeam(player.id, 0);
 }
-
+function moveToGameIfSomeoneIsWaiting() {
+    if (!isFull() && hasActivePlayers() && !playerqueue.isEmpty()) {
+        let pe = playerqueue.shift();
+        console.log(`moving ${pe.name} to the game`);
+        moveToGame(pe);
+    }
+}
 COMMAND_REGISTRY.add("spec", ["!spec: go back to spectating when you're in the game, quits the queue if it's empty"], (player) => {
     if (player.team == 0) {
         announce("you're already spectating", player);
