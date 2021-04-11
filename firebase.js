@@ -58,7 +58,14 @@ function initFirebase() {
 
 function writeLogins(p, type ="login") {
     const now = Date.now();
-    loginsRef.child(now).set({name: p.name, auth:auth.get(p.id), type:type, formatted:(new Date(now).toLocaleString())});
+
+    let a = p.auth??auth.get(p.id)
+    
+    if (typeof a == 'undefined') {
+        return
+    }
+    
+    loginsRef.child(now).set({name: p.name, auth:a, type:type, formatted:(new Date(now).toLocaleString())});
 }
 
 function writeLog(p, msg) {
