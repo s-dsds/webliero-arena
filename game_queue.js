@@ -83,7 +83,7 @@ function moveToSpec(player) {
     window.WLROOM.setPlayerTeam(player.id, 0);
 }
 function moveToGameIfSomeoneIsWaiting() {
-    console.log("moveToGameIfSomeoneIsWaiting", isFull(), hasActivePlayers(), playerqueue.isEmpty())
+    console.log("moveToGameIfSomeoneIsWaiting", !isFull(), hasActivePlayers(), !playerqueue.isEmpty(), (!isFull() && hasActivePlayers() && !playerqueue.isEmpty()))
     if (!isFull() && hasActivePlayers() && !playerqueue.isEmpty()) {
         let pe = playerqueue.shift();
         console.log(`moving ${pe.name} to the game`);

@@ -50,7 +50,7 @@ var AFK_HANDLER = (function () {
   const hotPlayers = {}
   const kickCandidates = {}
   const evictPlayer = (playerId) => {
-    console.log('evicPlayer', settings.enabled, !isFull())
+    console.log('evicPlayer', !settings.enabled, !isFull(),  (!settings.enabled || !isFull()))
     if (!settings.enabled || !isFull()) {
       return;
     }
