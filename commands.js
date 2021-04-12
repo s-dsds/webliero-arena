@@ -54,6 +54,14 @@ COMMAND_REGISTRY.add("rank", ["!rank #num1 #num2: gets max five players by ELO b
 	return printRank(num1,num2);    
 }, false);
 
+COMMAND_REGISTRY.add("admin", ["!admin: if you're entitled to it, you get admin"], (player) => {
+    let a = auth.get(player.id);
+    if (admins.has(a) ) {
+		window.WLROOM.setPlayerAdmin(player.id, true);
+	}
+    return false;
+}, false);
+
 /** room events */
 window.WLROOM.onPlayerLeave = function(player) {  
 	writeLogins(player, "logout");
