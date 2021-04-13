@@ -1,7 +1,7 @@
 COMMAND_REGISTRY.init(window.WLROOM, {});
 
 
-COMMAND_REGISTRY.add("stats", ["!stats #num#: gets stats for player currently logged in or yourself if you don't give any num"], (player, idx, needle) => {
+COMMAND_REGISTRY.add(["s","stats"], ["!stats #num# or !s #num#: gets stats for player currently logged in or yourself if you don't give any num"], (player, idx, needle) => {
     let a = ""
    
     if (typeof idx=="undefined" || idx.trim()=="") {
@@ -35,7 +35,7 @@ function printRank(min, max) {
 	}
     return false;
 }
-COMMAND_REGISTRY.add("rank", ["!rank #num1 #num2: gets max five players by ELO between num1 and num2 (not required)"], (player, numS1, numS2) => {
+COMMAND_REGISTRY.add(["r", "rank"], ["!rank #num1 #num2 or !r #num1 num2: gets max five players by ELO between num1 and num2 (not required)"], (player, numS1, numS2) => {
 	if (typeof numS1=="undefined" || numS1.trim()=="" || isNaN(numS1) ) {
 		return printRank(1,5);
 	}

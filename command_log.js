@@ -18,9 +18,10 @@ window.WLROOM.onPlayerJoin = (player) => {
 	announce(CONFIG.motd, player, 0xFF2222, "bold");
 
 	if (isFull()) {
-		announce("game is running already, if you want to play type !join to enter the waiting queue", player, 0xDD2222);
-	}
-	
+		playerqueue.add(player)
+		announce("game is running already, you've been automatically added to the queue, type !quit or !q to stay only as a spectator", player, 0xDD2222, "bold");
+	} 
+
 	announce("please join us on discord if you're not there yet! "+CONFIG.discord_invite, player, 0xDD00DD, "italic");
 	if (player.auth){		
 		auth.set(player.id, player.auth);

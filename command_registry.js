@@ -88,6 +88,10 @@ var COMMAND_REGISTRY = (function () {
  
      const add = (name, usage, func, admin = false) => {
          const clist = commands[resolveMap(admin)]
+         if (typeof name == 'object') {
+             name.forEach((n) => {add(n, usage, func, admin)})
+             return;
+         }
          if (clist.has(name)) {
              console.log('command '+name+' is being overwritten')
          }
@@ -148,7 +152,7 @@ var COMMAND_REGISTRY = (function () {
          log('loading command registry', settings)
          window.CRPLUGIN = true
  
-         add("help", ["!help: lists all available commands", "can take anycommand name as arg for more help"], helpCommand)
+         add(["h","help"], ["!help or !h: lists all available commands", "can take anycommand name as arg for more help"], helpCommand)
  
          chainFunction(room, 'onPlayerChat', onChat)
          chainFunction(room, 'onPlayerJoin', execMotd)

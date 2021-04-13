@@ -82,27 +82,28 @@ function moveToGame(player) {
 function moveToSpec(player) {
     window.WLROOM.setPlayerTeam(player.id, 0);
 }
-function moveToGameIfSomeoneIsWaiting() {
+function moveToGameIfSomeoneIsWaiting(force = false) {
     console.log("moveToGameIfSomeoneIsWaiting", !isFull(), hasActivePlayers(), !playerqueue.isEmpty(), (!isFull() && hasActivePlayers() && !playerqueue.isEmpty()))
-    if (!isFull() && hasActivePlayers() && !playerqueue.isEmpty()) {
+    if ((force || (!isFull() && hasActivePlayers())) && !playerqueue.isEmpty()) {
         let pe = playerqueue.shift();
         console.log(`moving ${pe.name} to the game`);
         moveToGame(pe);
         window.WLROOM.restartGame();
     }
 }
-COMMAND_REGISTRY.add("spec", ["!spec: go back to spectating when you're in the game, quits the queue if it's empty"], (player) => {
-    if (player.team == 0) {
-        announce("you're already spectating", player);
+COMMAND_REGISTRY.add(["q", "quit"], ["!quit or !q: you'll be removed from the waiting queue & go back to spectating when you're in the game"], (player) => {
+    if (playerqueue.remove(player)) { // if in queue, the player was not playing anyway
+        announce(`>> ${player.name} was removed from the queue <<`);
+        announce("you'll have to type !join to go back in queue", player);
         return false;
-    }
+    } 
     announce("you'll have to type !join to play again", player);
     moveToSpec(player);
     return false;
 }, false);
 
 
-COMMAND_REGISTRY.add("join", ["!join: you'll be added in the queue for next games"], (player) => {
+COMMAND_REGISTRY.add(["j","join"], ["!join or !j: you'll be added in the queue for next games"], (player) => {
     if (player.team != 0) {
         announce("you're already playing", player);
         return false;
@@ -124,16 +125,7 @@ COMMAND_REGISTRY.add("join", ["!join: you'll be added in the queue for next game
     return false;
 }, false);
 
-COMMAND_REGISTRY.add("quit", ["!quit: you'll be removed from the waiting queue"], (player) => {
-    if (playerqueue.remove(player)) {
-        announce(`>> ${player.name} was removed from the queue <<`);
-    } else {
-        announce("you were not in the queue", player);
-    }
-    return false;
-}, false);
-
-COMMAND_REGISTRY.add("place", ["!place: shows your place in the current waiting queue"], (player) => {
+COMMAND_REGISTRY.add(["p","place"], ["!place or !p: shows your place in the current waiting queue"], (player) => {
     let place = playerqueue.getPlace(player);
     if (place.playercount == 0) {
         announce("the queue is empty", player);
