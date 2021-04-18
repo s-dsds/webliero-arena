@@ -84,10 +84,12 @@ function addStat(k,v) {
 				console.log(`game invalidated`, v.stats.finalScores, diffSE, o.startTime, k);
 				return;
 		  }
-		  if (activePlayers.filter(e => (e.score.kills>maxScore||e.score.score>maxScore)).length>0) {
-			console.log(`detected a game with bad config (flagworm?))`, v.stats.finalScores);
-			return;
-		  }
+		  if (false==(typeof CONFIG.ignore_score_limit != 'undefined' && CONFIG.ignore_score_limit)) {
+			if (activePlayers.filter(e => (e.score.kills>maxScore||e.score.score>maxScore)).length>0) {
+				console.log(`detected a game with bad config (flagworm?))`, v.stats.finalScores);
+				return;
+			  }
+		  }		  
 		  
 		  /*-- count all actual games */
 		  var d = o.startTime.toISOString().split('T')[0];

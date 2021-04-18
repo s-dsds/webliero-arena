@@ -13,5 +13,6 @@ const CONFIG = {
     motd: "Welcome to the duel arena", //ZimmBall Arena
     room_name: "Liero Arena",
     max_players: 12,
+    ignore_score_limit: true,
 };
 
