@@ -8,10 +8,13 @@ COMMAND_REGISTRY.add(["s","stats"], ["!stats #num# or !s #num#: gets stats for p
         a = auth.get(player.id)
     } else if (allPlayers.has(idx.trim())) {
         a = idx.trim()
+    } else if (idx[0]=="r") {
+        let rankidx = isNaN(idx.substr(1))?0:Math.min(Math.max(0, (parseInt(idx.substr(1)))-1),(rankElo.length-1));        
+        a = rankElo[rankidx];        
     } else if (idx[0]!="#" || isNaN(idx.substr(1)) || !auth.has(parseInt(idx.substr(1)))) {
         announce("wrong player id, use #playername to get i ", player, 0xFFF0000);
         return false;
-    } else {
+	} else {
         a = auth.get(parseInt(idx.substr(1)))
     }
 
@@ -66,12 +69,13 @@ COMMAND_REGISTRY.add("admin", ["!admin: if you're entitled to it, you get admin"
 window.WLROOM.onPlayerLeave = function(player) {  
 	writeLogins(player, "logout");
 	playerqueue.remove(player);
-	auth.delete(player.id);
-
-	if (player.team!=0 && hasActivePlayers()) {
+    auth.delete(player.id);
+    // to handle when player manually or accidentally leaves the game while playing a match
+    let full = isFull();
+	if (!full && hasActivePlayers() && !playerqueue.isEmpty()) {
 	   window.WLROOM.endGame();
 	}
-	setLock(isFull());
+	setLock(full);
 }
 
 window.WLROOM.onGameEnd = function() {		

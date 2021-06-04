@@ -124,3 +124,12 @@ COMMAND_REGISTRY.add("reset", ["!reset: resets to last settings loaded from data
     window.WLROOM.setSettings(window.settingsSnap);
     return false;
 }, true);
+
+
+COMMAND_REGISTRY.add("poolreload", ["!poolreload: reloads the map pool from database from database"], (player) => {
+    poolRef = fdb.ref(`${CONFIG.room_id}/pool`);    
+    listenForPoolEvents();
+    mypool = {};
+    mypoolIdx = [];
+    return false;
+}, true);

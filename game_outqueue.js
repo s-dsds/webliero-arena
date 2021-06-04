@@ -1,6 +1,6 @@
 const REASON_OUT_MAX = 0;
 const REASON_OUT_LOOSE = 1;
-const REASON_NOT_OUT_TIE = 2;
+const REASON_OUT_TIE = 2;
 
 class Out {
     constructor(reasonOut, player) {
@@ -39,7 +39,7 @@ class OutQueue {
                     return this.currentOut
                 }
             }
-            this.currentOut = new Out(REASON_NOT_OUT_TIE, null)
+            this.currentOut = new Out(REASON_OUT_TIE, scores[Math.round(Math.random())].player)
             return this.currentOut
         }
         let winner = (s0 > s1)?0:1;
@@ -62,21 +62,24 @@ class OutQueue {
 
 var currentOutQueue = new OutQueue();
 
-function notifyNextPlayer() {
-    let out = currentOutQueue.getChangeSet();
+function notifyNextPlayer(out) {
     if (out==null) {
         return;
     }
+    /*
     if (out.reasonOut==REASON_NOT_OUT_TIE) {
         announce(`>> TIE, both players stay in the game <<`);
         return;
     }
+    */
     let player = playerqueue.getNextPlayer();
     let outmsg = "";
     if (out.reasonOut==REASON_OUT_MAX) {  
         outmsg = `${out.player.name} (max game played)`;
     } else if (out.reasonOut==REASON_OUT_LOOSE) {
         outmsg = `${out.player.name} who lost`;
+    } else if (out.reasonOut==REASON_OUT_TIE) {
+        outmsg = `${out.player.name} (randomly chosen) >> TIE <<`;
     }
     if (player!=null) {  
         announceEmphasizeToPlayerOnly(`>> @${player.name} is to enter the arena next replacing ${outmsg}<<`,player,0xDD91C6,"bold", 2);
