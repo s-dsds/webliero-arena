@@ -73,7 +73,9 @@ window.WLROOM.onPlayerLeave = function(player) {
     // to handle when player manually or accidentally leaves the game while playing a match
     let full = isFull();
 	if (!full && hasActivePlayers() && !playerqueue.isEmpty()) {
-	   window.WLROOM.endGame();
+        let pe = playerqueue.shift();
+        moveToGame(pe);
+	    window.WLROOM.restartGame();
 	}
 	setLock(full);
 }
