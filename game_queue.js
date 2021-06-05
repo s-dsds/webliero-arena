@@ -99,6 +99,7 @@ COMMAND_REGISTRY.add(["q", "quit"], ["!quit or !q: you'll be removed from the wa
     } 
     announce("you'll have to type !join to play again", player);
     moveToSpec(player);
+    moveToGameIfSomeoneIsWaiting();
     return false;
 }, false);
 
