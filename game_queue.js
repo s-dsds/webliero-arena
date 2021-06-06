@@ -98,7 +98,7 @@ COMMAND_REGISTRY.add(["q", "quit"], ["!quit or !q: you'll be removed from the wa
         return false;
     } 
     announce("you'll have to type !join to play again", player);
-    const full= isFull();
+    const full= player.team!=0 && isFull();
     moveToSpec(player);
     moveToGameIfSomeoneIsWaiting(full);
     return false;
