@@ -17,7 +17,7 @@ async function getMapData(name) {
     if (name.split('.').pop()=="png") {    
        obj = await getPngMapData(name);
     } else {
-        let buff = await (await fetch(baseURL + '/' +  name)).arrayBuffer();
+        let buff = await (await fetch(getMapUrl(name))).arrayBuffer();
         let arr = Array.from(new Uint8Array(buff)).slice(0, x*y);
         obj = {x:x,y:y,data:arr};
     }
@@ -25,6 +25,14 @@ async function getMapData(name) {
     mapCache.set(name, obj)
     return obj;
 }
+
+function getMapUrl(name) {
+    if (name.substring(0,8)=='https://') {
+        return name;
+    }
+    return baseURL + '/' +  name;
+}
+
 
 var pixConvFailures = 0;
 	
@@ -40,7 +48,7 @@ function getbestpixelValue(red,green,blue) {
 
 async function getPngMapData(name) {
     pixConvFailures = 0;
-    let blob = await (await fetch(baseURL + '/' +  name)).blob();
+    let blob = await (await fetch(getMapUrl(name))).blob();
     let img = new Image();
     const imageLoadPromise = new Promise(resolve => {        
       img.onload = resolve;
